@@ -14,6 +14,6 @@ interface AccountDao {
     fun getAll(): LiveData<List<Account>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(account: Account)
+    suspend fun save(account: Account)
 
 }

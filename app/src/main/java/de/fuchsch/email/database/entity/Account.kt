@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Account (
-    @PrimaryKey val id: Int,
     val name: String,
-    @Embedded val settings: AccountSetting
+    @Embedded val settings: AccountSetting,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
 )
