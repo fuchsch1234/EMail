@@ -1,4 +1,4 @@
-package de.fuchsch.email
+package de.fuchsch.email.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import de.fuchsch.email.AccountAdapter
+import de.fuchsch.email.R
 import de.fuchsch.email.viewmodel.AccountsViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*

@@ -1,9 +1,10 @@
-package de.fuchsch.email
+package de.fuchsch.email.activity
 
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import de.fuchsch.email.R
 import de.fuchsch.email.database.entity.Account
 import de.fuchsch.email.database.entity.AccountSetting
 import de.fuchsch.email.database.entity.IMAPProtocol
