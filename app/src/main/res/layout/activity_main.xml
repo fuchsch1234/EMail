@@ -33,4 +33,6 @@
         app:maxImageSize="50dp"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <include layout="@layout/content_main" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
