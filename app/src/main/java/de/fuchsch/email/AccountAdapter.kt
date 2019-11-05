@@ -4,18 +4,29 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import de.fuchsch.email.database.entity.Account
+import kotlinx.android.synthetic.main.accounts_recyclerview_item.view.*
 
-class AccountAdapter(context: Context): RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
+typealias ClickListener = (Account) -> Unit
+
+class AccountAdapter(context: Context, val listener: ClickListener)
+    : RecyclerView.Adapter<AccountAdapter.AccountViewHolder>()
+{
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     private var accounts = emptyList<Account>()
 
     inner class AccountViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val accountItemView: TextView = itemView.findViewById(R.id.TextView)
+
+        fun bind(account: Account, listener: ClickListener) {
+            val card: CardView = itemView.findViewById(R.id.cardView)
+            card.TextView.text = account.name
+            card.setOnClickListener { listener(account) }
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
@@ -25,7 +36,7 @@ class AccountAdapter(context: Context): RecyclerView.Adapter<AccountAdapter.Acco
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
         val current = accounts[position]
-        holder.accountItemView.text = current.name
+        holder.bind(current, listener)
     }
 
     internal fun setAccounts(accounts: List<Account>) {

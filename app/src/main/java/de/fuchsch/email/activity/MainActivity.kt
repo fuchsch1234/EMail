@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.fuchsch.email.AccountAdapter
 import de.fuchsch.email.R
+import de.fuchsch.email.database.entity.Account
 import de.fuchsch.email.viewmodel.AccountsViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,7 +18,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val model: AccountsViewModel by viewModel()
+    companion object {
+
+        val ACCOUNT = "${this::class.java.canonicalName}.ACCOUNT"
+
+    }
+
+    private val accountsModel: AccountsViewModel by viewModel()
 
     private val ADD_ACCOUNT_REQUEST = 1
 
@@ -26,10 +33,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val adapter = AccountAdapter(this)
+        val adapter = AccountAdapter(this, this::selectAccount)
         MainRecyclerView.adapter = adapter
         MainRecyclerView.layoutManager = LinearLayoutManager(this)
-        model.accounts.observe(this, Observer { accounts ->
+        accountsModel.accounts.observe(this, Observer { accounts ->
             accounts?.let { adapter.setAccounts(it) }
         })
 
@@ -39,6 +46,13 @@ class MainActivity : AppCompatActivity() {
     private fun addAccount() {
         val intent = Intent(this, AddAccountActivity::class.java)
         startActivityForResult(intent, ADD_ACCOUNT_REQUEST)
+    }
+
+    private fun selectAccount(account: Account) {
+        val intent = Intent(this, AccountActivity::class.java).apply {
+            putExtra(ACCOUNT, account)
+        }
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
