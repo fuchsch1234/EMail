@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import de.fuchsch.email.database.AppDatabase
 import de.fuchsch.email.repository.AccountRepository
+import de.fuchsch.email.viewmodel.AccountViewModel
 import de.fuchsch.email.viewmodel.AccountsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -25,6 +26,8 @@ val appModule = module {
     single { AccountRepository(get()) }
 
     viewModel { AccountsViewModel(get()) }
+
+    viewModel { AccountViewModel() }
 
 }
 

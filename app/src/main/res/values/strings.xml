@@ -17,4 +17,5 @@
         <item>SMTPS</item>
         <item>SMTP/STARTTLS</item>
     </string-array>
+    <string name="title_activity_account">AccountActivity</string>
 </resources>
