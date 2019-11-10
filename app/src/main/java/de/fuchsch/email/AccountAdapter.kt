@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import de.fuchsch.email.database.entity.Account
 import kotlinx.android.synthetic.main.accounts_recyclerview_item.view.*
 
-typealias ClickListener = (Account) -> Unit
+typealias AccountClickListener = (Account) -> Unit
 
-class AccountAdapter(context: Context, val listener: ClickListener)
+class AccountAdapter(context: Context, val listener: AccountClickListener)
     : RecyclerView.Adapter<AccountAdapter.AccountViewHolder>()
 {
 
@@ -21,9 +21,9 @@ class AccountAdapter(context: Context, val listener: ClickListener)
 
     inner class AccountViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        fun bind(account: Account, listener: ClickListener) {
-            val card: CardView = itemView.findViewById(R.id.cardView)
-            card.TextView.text = account.name
+        fun bind(account: Account, listener: AccountClickListener) {
+            val card: CardView = itemView.findViewById(R.id.AccountCardView)
+            card.AccountNameTextView.text = account.name
             card.setOnClickListener { listener(account) }
         }
 
