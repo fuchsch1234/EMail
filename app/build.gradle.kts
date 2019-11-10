@@ -78,6 +78,7 @@ dependencies {
     implementation("com.sun.mail:android-activation:$javaMailVersion")
 
     testImplementation("junit:junit:4.12")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
 }
