@@ -5,7 +5,7 @@ import javax.mail.Folder
 data class Folder (
     val name: String,
     val messageCount: Int,
-    val hasNewMessages: Boolean
+    val hasUnreadMessages: Boolean
 ) {
 
     companion object {
@@ -14,7 +14,7 @@ data class Folder (
             Folder(
                 folder.name,
                 folder.messageCount,
-                folder.hasNewMessages()
+                folder.unreadMessageCount > 0
             )
 
     }

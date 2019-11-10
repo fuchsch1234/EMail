@@ -31,7 +31,7 @@ class FolderAdapter(context: Context, private val listener: FolderClickListener)
             nameView.text = folder.name
             val messageView: TextView = itemView.findViewById(R.id.MessageCountTextView)
             messageView.text = folder.messageCount.toString()
-            if (folder.hasNewMessages) {
+            if (folder.hasUnreadMessages) {
                 messageView.setTypeface(messageView.typeface, Typeface.BOLD)
             } else {
                 messageView.setTypeface(messageView.typeface, Typeface.NORMAL)
