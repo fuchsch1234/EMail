@@ -29,10 +29,14 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+    packagingOptions {
+        pickFirst("META-INF/LICENSE.txt")
+    }
 }
 
 dependencies {
     val koinVersion = "2.0.1"
+    val javaMailVersion = "1.6.2"
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${KotlinCompilerVersion.VERSION}")
@@ -68,6 +72,10 @@ dependencies {
     implementation("org.koin:koin-androidx-scope:$koinVersion")
     // Koin AndroidX ViewModel features
     implementation("org.koin:koin-androidx-viewmodel:$koinVersion")
+
+    // JavaMail
+    implementation("com.sun.mail:android-mail:$javaMailVersion")
+    implementation("com.sun.mail:android-activation:$javaMailVersion")
 
     testImplementation("junit:junit:4.12")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")

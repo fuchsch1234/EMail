@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import de.fuchsch.email.database.AppDatabase
 import de.fuchsch.email.repository.AccountRepository
+import de.fuchsch.email.repository.MailRepository
 import de.fuchsch.email.viewmodel.AccountViewModel
 import de.fuchsch.email.viewmodel.AccountsViewModel
 import org.koin.android.ext.koin.androidContext
@@ -11,6 +12,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import javax.mail.Session
 
 val appModule = module {
 
@@ -25,9 +27,13 @@ val appModule = module {
 
     single { AccountRepository(get()) }
 
+    factory { Session.getDefaultInstance(emptyMap<String, String>().toProperties()) }
+
+    single { MailRepository(get()) }
+
     viewModel { AccountsViewModel(get()) }
 
-    viewModel { AccountViewModel() }
+    viewModel { AccountViewModel(get()) }
 
 }
 
