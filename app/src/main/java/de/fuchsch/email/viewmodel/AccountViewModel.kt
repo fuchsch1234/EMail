@@ -1,17 +1,22 @@
 package de.fuchsch.email.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import de.fuchsch.email.database.entity.Account
+import de.fuchsch.email.model.Folder
+import de.fuchsch.email.repository.MailRepository
+import kotlinx.coroutines.launch
 
-class AccountViewModel: ViewModel() {
+class AccountViewModel(private val mailRepository: MailRepository): ViewModel() {
 
-    private val mutableAccount = MutableLiveData<Account>()
-    val account: LiveData<Account> = mutableAccount
+    val account: LiveData<Account> = mailRepository.account
+
+    val folders: LiveData<List<Folder>> = mailRepository.folders
 
     fun select(account: Account) {
-        mutableAccount.value = account
+        mailRepository.account.value = account
+        viewModelScope.launch { mailRepository.getRootFolder() }
     }
 
 }

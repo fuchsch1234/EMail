@@ -3,6 +3,8 @@ package de.fuchsch.email.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import de.fuchsch.email.FolderAdapter
 import de.fuchsch.email.R
 import de.fuchsch.email.viewmodel.AccountViewModel
 
@@ -23,10 +25,15 @@ class AccountActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        accountViewModel.account.observe(this, Observer { account ->
-            account?.let {
-                MailText.text = "You've got no new mail for Account ${it.name}"
+        val adapter = FolderAdapter(this) {}
+        FolderRecyclerView.layoutManager = LinearLayoutManager(this)
+        FolderRecyclerView.adapter = adapter
+
+        accountViewModel.folders.observe(this, Observer { folders ->
+            folders?.let {
+                adapter.folders = it
             }
+
         })
 
         accountViewModel.select(intent.getParcelableExtra(MainActivity.ACCOUNT))
