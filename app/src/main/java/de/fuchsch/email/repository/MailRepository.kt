@@ -37,7 +37,9 @@ class MailRepository(private val session: Session) {
         account.value?.let {
             try {
                 imapStore.connect(it.settings.serverURL, it.settings.email, it.settings.password)
-                imapStore.getFolder(folder.name).messages.map { mail -> Message.fromMail(mail) }
+                val f = imapStore.getFolder(folder.name)
+                f.open(javax.mail.Folder.READ_ONLY)
+                f.messages.map { mail -> Message.fromMail(mail) }
             } catch (e: AuthenticationFailedException) {
                 Log.i(this::class.java.canonicalName, "${e.message}")
                 null
