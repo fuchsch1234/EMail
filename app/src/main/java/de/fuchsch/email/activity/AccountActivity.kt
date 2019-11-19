@@ -1,5 +1,6 @@
 package de.fuchsch.email.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -25,7 +26,13 @@ class AccountActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val adapter = FolderAdapter(this) {}
+        val adapter = FolderAdapter(this) { folder ->
+            val intent = Intent(this, FolderActivity::class.java).apply {
+                putExtra(FolderActivity.FOLDER, folder)
+            }
+            startActivity(intent)
+        }
+
         FolderRecyclerView.layoutManager = LinearLayoutManager(this)
         FolderRecyclerView.adapter = adapter
 
