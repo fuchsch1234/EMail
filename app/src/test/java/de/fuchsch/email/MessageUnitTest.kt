@@ -1,34 +1,39 @@
 package de.fuchsch.email
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import de.fuchsch.email.model.Message
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.hasSize
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
+import org.junit.Before
 import org.junit.Test
 import javax.mail.Session
 import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeBodyPart
 import javax.mail.internet.MimeMessage
+import javax.mail.internet.MimeMultipart
 
 class MessageUnitTest {
 
+    private lateinit var mail: MimeMessage
+
+    @Before
+    fun setUp() {
+        mail = MimeMessage(Session.getDefaultInstance(emptyMap<String, String>().toProperties()))
+            .apply {
+                sender = InternetAddress("sender@example.com")
+                addRecipient(
+                    javax.mail.Message.RecipientType.TO,
+                    InternetAddress("recipient@example.com")
+                )
+                subject = "Test Subject"
+            }
+    }
+
     @Test
-    fun `conversion from javamail message works`() {
-        val mail = MimeMessage(Session.getDefaultInstance(emptyMap<String, String>().toProperties()))
-        mail.sender = InternetAddress("sender@example.com")
-        mail.addRecipient(javax.mail.Message.RecipientType.TO, InternetAddress("recipient@example.com"))
-        mail.subject = "Test Subject"
+    fun `conversion from simple javamail message works`() {
         mail.setContent("Test Message", "text/plain")
-//            val mail = mock<javax.mail.Message> {
-//                on { allRecipients } doReturn arrayOf(InternetAddress("recipient@example.com"))
-//                on { from } doReturn arrayOf(InternetAddress("sender@example.com"))
-//                on { subject } doReturn "Test Subject"
-//                on { toString() } doReturn "Test Message"
-//            }
+        mail.saveChanges()
 
         val testObject = Message.fromMail(mail)
         assertEquals(testObject.subject, "Test Subject")
@@ -38,4 +43,35 @@ class MessageUnitTest {
         assertEquals(testObject.message, "Test Message")
     }
 
+    @Test
+    fun `conversion of multipart javamail message works`() {
+        val mp = MimeMultipart()
+        mp.addBodyPart(MimeBodyPart().apply { setContent("Test Message", "text/plain") })
+        mp.addBodyPart(MimeBodyPart().apply { setContent("Test HTML Message", "text/html") })
+        mail.setContent(mp, "multipart/alternative")
+        mail.saveChanges()
+
+        val testObject = Message.fromMail(mail)
+        assertEquals(testObject.subject, "Test Subject")
+        assertThat(testObject.recipients, hasSize(1))
+        assertThat(testObject.recipients, contains("recipient@example.com"))
+        assertEquals(testObject.sender, "sender@example.com")
+        assertEquals(testObject.message, "Test Message")
+    }
+
+    @Test
+    fun `conversion of multipart javamail message without plaintext fails`() {
+        val mp = MimeMultipart()
+        mp.addBodyPart(MimeBodyPart().apply { setContent("Test HTML Message", "text/html") })
+        mp.addBodyPart(MimeBodyPart().apply { setContent("Another HTML Message", "text/html") })
+        mail.setContent(mp, "multipart/alternative")
+        mail.saveChanges()
+
+        val testObject = Message.fromMail(mail)
+        assertEquals(testObject.subject, "Test Subject")
+        assertThat(testObject.recipients, hasSize(1))
+        assertThat(testObject.recipients, contains("recipient@example.com"))
+        assertEquals(testObject.sender, "sender@example.com")
+        assertEquals(testObject.message, "Unknown content")
+    }
 }
