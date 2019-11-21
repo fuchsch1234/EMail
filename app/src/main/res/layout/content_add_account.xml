@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/activity_add_account_server"
+        app:hintAnimationEnabled="false"
         app:hintEnabled="true"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
         app:layout_constraintHorizontal_bias="1.0"
@@ -34,7 +35,6 @@
             android:id="@+id/ServerURLEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/activity_add_account_server"
             android:inputType="textUri"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -54,19 +54,20 @@
             android:id="@+id/EMailEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/activity_add_account_email"
             android:inputType="text|textEmailAddress"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout3"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:hint="@string/activity_add_account_password"
         app:hintEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
         app:passwordToggleEnabled="true">
@@ -75,7 +76,6 @@
             android:id="@+id/PasswordEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/activity_add_account_password"
             android:inputType="text|textPassword"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -114,7 +114,6 @@
             android:id="@+id/NameEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/activity_add_account_name"
             android:inputType="text"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
