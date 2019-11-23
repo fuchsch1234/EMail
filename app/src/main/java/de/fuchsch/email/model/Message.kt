@@ -1,14 +1,17 @@
 package de.fuchsch.email.model
 
+import android.os.Parcelable
 import de.fuchsch.email.util.iterable
+import kotlinx.android.parcel.Parcelize
 import javax.mail.internet.MimeMultipart
 
+@Parcelize
 data class Message(
     val subject: String,
     val message: String,
     val sender: String,
     val recipients: List<String>
-) {
+) : Parcelable {
 
     companion object {
 
