@@ -1,11 +1,15 @@
 package de.fuchsch.email.activity
 
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import de.fuchsch.email.MessageAdapter
+import de.fuchsch.email.Adapter
 import de.fuchsch.email.R
+import de.fuchsch.email.model.Message
 import de.fuchsch.email.viewmodel.FolderViewModel
 
 import kotlinx.android.synthetic.main.activity_folder.*
@@ -30,11 +34,11 @@ class FolderActivity : AppCompatActivity() {
         }
 
         MessageRecyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = MessageAdapter(this)
+        val adapter = Adapter(this, ::bindRecyclerViewHolder)
         MessageRecyclerView.adapter = adapter
 
         viewmodel.messages.observe(this, Observer {
-            it?.let { messages -> adapter.messages = messages }
+            it?.let { messages -> adapter.items = messages }
         })
 
         viewmodel.selectFolder(intent.getParcelableExtra(FOLDER))
@@ -43,6 +47,15 @@ class FolderActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun bindRecyclerViewHolder(itemView: View, message: Message, listener: (Message) -> Unit) {
+        val subjectView: TextView = itemView.findViewById(R.id.SubjectLineTextView)
+        subjectView.text = message.subject
+        val messageView: TextView = itemView.findViewById(R.id.PreviewTextView)
+        messageView.text = message.message.split("\n").first()
+        val cardView: CardView = itemView.findViewById(R.id.MessageAdapterCardView)
+        cardView.setOnClickListener { listener(message) }
     }
 
 }

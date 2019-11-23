@@ -5,12 +5,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import de.fuchsch.email.AccountAdapter
+import de.fuchsch.email.Adapter
 import de.fuchsch.email.R
 import de.fuchsch.email.database.entity.Account
 import de.fuchsch.email.viewmodel.AccountsViewModel
+import kotlinx.android.synthetic.main.accounts_recyclerview_item.view.*
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -33,11 +36,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val adapter = AccountAdapter(this, this::selectAccount)
+        val adapter = Adapter(this, this::bindRecyclerViewHolder, this::selectAccount)
         MainRecyclerView.adapter = adapter
         MainRecyclerView.layoutManager = LinearLayoutManager(this)
         accountsModel.accounts.observe(this, Observer { accounts ->
-            accounts?.let { adapter.setAccounts(it) }
+            accounts?.let { adapter.items = it }
         })
 
         fab.setOnClickListener { addAccount() }
@@ -55,6 +58,12 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun bindRecyclerViewHolder(itemView: View, account: Account, listener: (Account) -> Unit) {
+        val card: CardView = itemView.findViewById(R.id.AccountCardView)
+        card.AccountNameTextView.text = account.name
+        card.setOnClickListener { listener(account) }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -70,4 +79,5 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
