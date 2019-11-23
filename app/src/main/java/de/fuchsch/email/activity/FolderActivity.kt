@@ -38,7 +38,12 @@ class FolderActivity : AppCompatActivity() {
         val adapter = Adapter(this,
             R.layout.folder_recyclerview_item,
             ::bindRecyclerViewHolder)
-
+            {
+                val intent = Intent(this, MessageActivity::class.java).apply {
+                    putExtra(MessageActivity.MESSAGE, it)
+                }
+                startActivity(intent)
+            }
         MessageRecyclerView.adapter = adapter
 
         viewmodel.messages.observe(this, Observer {
