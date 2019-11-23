@@ -1,5 +1,6 @@
 package de.fuchsch.email.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -34,7 +35,10 @@ class FolderActivity : AppCompatActivity() {
         }
 
         MessageRecyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = Adapter(this, ::bindRecyclerViewHolder)
+        val adapter = Adapter(this,
+            R.layout.folder_recyclerview_item,
+            ::bindRecyclerViewHolder)
+
         MessageRecyclerView.adapter = adapter
 
         viewmodel.messages.observe(this, Observer {

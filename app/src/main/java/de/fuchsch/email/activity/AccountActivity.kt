@@ -31,12 +31,15 @@ class AccountActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        val adapter = Adapter(this, ::bindRecyclerViewHolder) { folder ->
-            val intent = Intent(this, FolderActivity::class.java).apply {
-                putExtra(FolderActivity.FOLDER, folder)
+        val adapter = Adapter(this,
+            R.layout.account_recyclerview_item,
+            ::bindRecyclerViewHolder)
+            { folder ->
+                val intent = Intent(this, FolderActivity::class.java).apply {
+                    putExtra(FolderActivity.FOLDER, folder)
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
-        }
 
         FolderRecyclerView.layoutManager = LinearLayoutManager(this)
         FolderRecyclerView.adapter = adapter

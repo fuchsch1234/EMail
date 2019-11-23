@@ -36,7 +36,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val adapter = Adapter(this, this::bindRecyclerViewHolder, this::selectAccount)
+        val adapter = Adapter(this,
+            R.layout.accounts_recyclerview_item,
+            this::bindRecyclerViewHolder,
+            this::selectAccount)
         MainRecyclerView.adapter = adapter
         MainRecyclerView.layoutManager = LinearLayoutManager(this)
         accountsModel.accounts.observe(this, Observer { accounts ->
