@@ -1,7 +1,6 @@
 package de.fuchsch.email.activity
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import de.fuchsch.email.R
 import de.fuchsch.email.model.Message

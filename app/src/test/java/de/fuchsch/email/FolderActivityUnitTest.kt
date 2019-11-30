@@ -24,7 +24,7 @@ import org.robolectric.annotation.LooperMode
 @LooperMode(LooperMode.Mode.PAUSED)
 class FolderActivityUnitTest: KoinTest {
 
-    lateinit var viewmodel: FolderViewModel
+    private lateinit var viewmodel: FolderViewModel
 
     @Before
     fun setUp() {

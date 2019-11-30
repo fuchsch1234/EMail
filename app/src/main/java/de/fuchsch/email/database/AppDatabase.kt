@@ -7,7 +7,7 @@ import de.fuchsch.email.database.dao.AccountDao
 import de.fuchsch.email.database.entity.Account
 import de.fuchsch.email.database.entity.IMAPProtocolConverter
 
-@Database(entities = arrayOf(Account::class), version = 2)
+@Database(entities = [Account::class], version = 2)
 @TypeConverters(IMAPProtocolConverter::class)
 abstract class AppDatabase: RoomDatabase() {
 
