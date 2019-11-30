@@ -86,6 +86,8 @@ dependencies {
     testImplementation("org.koin:koin-test:$koinVersion")
     testImplementation("org.robolectric:robolectric:4.3")
     testImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    testImplementation("androidx.test.espresso:espresso-contrib:3.2.0")
+    testImplementation("androidx.test.espresso:espresso-intents:3.2.0")
     testImplementation("androidx.arch.core:core-testing:2.1.0")
     testImplementation("androidx.test.ext:junit:1.1.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.1")
