@@ -8,6 +8,7 @@ import de.fuchsch.email.repository.MailRepository
 import de.fuchsch.email.viewmodel.AccountViewModel
 import de.fuchsch.email.viewmodel.AccountsViewModel
 import de.fuchsch.email.viewmodel.FolderViewModel
+import de.fuchsch.email.viewmodel.MessageViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -37,6 +38,8 @@ val appModule = module {
     viewModel { AccountViewModel(get()) }
 
     viewModel { FolderViewModel(get()) }
+
+    viewModel { MessageViewModel(get()) }
 
 }
 
