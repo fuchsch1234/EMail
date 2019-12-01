@@ -20,4 +20,6 @@
     <string name="title_activity_account">AccountActivity</string>
     <string name="title_activity_folder">FolderActivity</string>
     <string name="title_activity_message">MessageActivity</string>
+    <string name="delete_message_button_description">Delete the current message</string>
+    <string name="move_message_button_description">Move the current message</string>
 </resources>
