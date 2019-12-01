@@ -7,8 +7,9 @@ import de.fuchsch.email.model.Folder
 import de.fuchsch.email.model.Message
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.mail.AuthenticationFailedException
-import javax.mail.Session
+import java.lang.IllegalStateException
+import java.lang.IndexOutOfBoundsException
+import javax.mail.*
 
 class MailRepository(private val session: Session) {
 
@@ -45,6 +46,30 @@ class MailRepository(private val session: Session) {
                 null
             }
         } ?: emptyList()
+    }
+
+    suspend fun deleteMessage(message: Message) = withContext(Dispatchers.IO) {
+        val imapStore = session.getStore("imaps")
+        account.value?.let {
+            try {
+                imapStore.connect(it.settings.serverURL, it.settings.email, it.settings.password)
+                val f = imapStore.getFolder(message.folder.name)
+                f.open(javax.mail.Folder.READ_WRITE)
+                val m = f.getMessage(message.messageNumber)
+                m.setFlag(Flags.Flag.DELETED, true)
+                f.expunge()
+            } catch (e: AuthenticationFailedException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            } catch (e: IndexOutOfBoundsException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            } catch (e: FolderNotFoundException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            } catch (e: IllegalStateException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            } catch (e: MessagingException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            }
+        }
     }
 
 }
