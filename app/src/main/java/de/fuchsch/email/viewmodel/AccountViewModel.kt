@@ -10,13 +10,13 @@ import kotlinx.coroutines.launch
 
 class AccountViewModel(private val mailRepository: MailRepository): ViewModel() {
 
-    val account: LiveData<Account> = mailRepository.account
-
     val folders: LiveData<List<Folder>> = mailRepository.folders
 
     fun select(account: Account) {
-        mailRepository.account.value = account
-        viewModelScope.launch { mailRepository.getRootFolder() }
+        viewModelScope.launch {
+            mailRepository.changeAccount(account)
+            mailRepository.getRootFolder()
+        }
     }
 
 }

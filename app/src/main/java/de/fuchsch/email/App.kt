@@ -5,6 +5,7 @@ import androidx.room.Room
 import de.fuchsch.email.database.AppDatabase
 import de.fuchsch.email.repository.AccountRepository
 import de.fuchsch.email.repository.MailRepository
+import de.fuchsch.email.repository.MailService
 import de.fuchsch.email.viewmodel.AccountViewModel
 import de.fuchsch.email.viewmodel.AccountsViewModel
 import de.fuchsch.email.viewmodel.FolderViewModel
@@ -30,6 +31,8 @@ val appModule = module {
     single { AccountRepository(get()) }
 
     factory { Session.getDefaultInstance(emptyMap<String, String>().toProperties()) }
+
+    single { MailService(get()) }
 
     single { MailRepository(get()) }
 
