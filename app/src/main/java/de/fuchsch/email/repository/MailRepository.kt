@@ -1,27 +1,35 @@
 package de.fuchsch.email.repository
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import de.fuchsch.email.database.dao.FolderDao
 import de.fuchsch.email.database.entity.Account
+import de.fuchsch.email.database.entity.FolderEntity
 import de.fuchsch.email.model.Folder
 import de.fuchsch.email.model.Message
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 
-class MailRepository(private val mailService: MailService) {
+class MailRepository(private val mailService: MailService,
+                     private val folderDao: FolderDao)
+{
 
-    val folders = MutableLiveData<List<Folder>>()
+    private val accountId = MutableLiveData<Int>()
 
-    val account = MutableLiveData<Account>()
+    val folders = accountId
+        .switchMap { folderDao.getFoldersForAccount(it) }
+        .map { list -> list.map { Folder(it.name, it.messageCount, it.hasUnreadMessages) } }
 
     suspend fun changeAccount(account: Account) = coroutineScope {
         mailService.changeAccount(account)
+        accountId.postValue(account.id)
     }
 
     suspend fun getRootFolder() = coroutineScope {
-        val folderList = mailService.getRootFolder().map { f -> Folder.fromJavaMailFolder(f) }
-        withContext(Dispatchers.Main) {
-            folders.value = folderList
+        mailService.getRootFolder().map { f ->
+            val folder = Folder.fromJavaMailFolder(f)
+            val entity = FolderEntity(folder.name, folder.messageCount, folder.hasUnreadMessages, accountId.value ?: 0)
+            folderDao.save(entity)
         }
     }
 

@@ -28,13 +28,15 @@ val appModule = module {
 
     single { get<AppDatabase>().accountDao() }
 
+    single { get<AppDatabase>().folderDao() }
+
     single { AccountRepository(get()) }
 
     factory { Session.getDefaultInstance(emptyMap<String, String>().toProperties()) }
 
     single { MailService(get()) }
 
-    single { MailRepository(get()) }
+    single { MailRepository(get(), get()) }
 
     viewModel { AccountsViewModel(get()) }
 
