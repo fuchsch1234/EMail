@@ -11,8 +11,7 @@ data class Message(
     val message: String,
     val sender: String,
     val recipients: List<String>,
-    val messageNumber: Int,
-    val folder: Folder
+    val messageNumber: Int
 ) : Parcelable {
 
     companion object {
@@ -39,8 +38,7 @@ data class Message(
                 content,
                 message.from.first().toString(),
                 message.allRecipients.map { it.toString() },
-                message.messageNumber,
-                Folder.fromJavaMailFolder(message.folder)
+                message.messageNumber
             )
         }
     }
