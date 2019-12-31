@@ -28,7 +28,9 @@ class MailRepository(private val mailService: MailService,
     suspend fun getRootFolder() = coroutineScope {
         mailService.getRootFolder().map { f ->
             val folder = Folder.fromJavaMailFolder(f)
-            val entity = FolderEntity(folder.name, folder.messageCount, folder.hasUnreadMessages, accountId.value ?: 0)
+            val entity = FolderEntity(f.urlName.toString(),
+                folder.name, folder.messageCount,
+                folder.hasUnreadMessages, accountId.value ?: 0)
             folderDao.save(entity)
         }
     }
