@@ -33,7 +33,7 @@ class FolderActivityUnitTest: KoinTest {
 
     private lateinit var viewmodel: FolderViewModel
 
-    private val message = Message("Test Subject", "Test Message", "", emptyList())
+    private val message = Message("Test Subject", "Test Message", "", emptyList(), 1)
 
     @get:Rule
     var intentsRule =

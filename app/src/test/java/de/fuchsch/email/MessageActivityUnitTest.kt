@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.nhaarman.mockitokotlin2.*
 import de.fuchsch.email.activity.MessageActivity
+import de.fuchsch.email.model.Folder
 import de.fuchsch.email.model.Message
 import de.fuchsch.email.viewmodel.MessageViewModel
 import org.junit.After
@@ -28,7 +29,9 @@ class MessageActivityUnitTest: KoinTest {
     private val message = Message("Test subject",
         "Test message",
         "sender@example.com",
-        listOf("recipient@example.com", "cc@example.com"))
+        listOf("recipient@example.com", "cc@example.com"),
+        1
+    )
 
     private lateinit var viewModel: MessageViewModel
 

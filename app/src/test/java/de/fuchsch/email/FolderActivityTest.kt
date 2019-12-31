@@ -38,7 +38,7 @@ class FolderActivityTest: KoinTest {
         declareMock<MailRepository> {
             repository = this
             stub { onBlocking { getMessages(any()) } doReturn listOf(
-                Message("Test Subject", "Test Message", "", emptyList())
+                Message("Test Subject", "Test Message", "", emptyList(), 1)
             )}
         }
     }
