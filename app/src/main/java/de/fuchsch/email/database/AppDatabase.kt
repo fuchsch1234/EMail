@@ -11,7 +11,7 @@ import de.fuchsch.email.database.entity.FolderEntity
 import de.fuchsch.email.database.entity.IMAPProtocolConverter
 import de.fuchsch.email.database.entity.MessageEntity
 
-@Database(entities = [Account::class, FolderEntity::class, MessageEntity::class], version = 2)
+@Database(entities = [Account::class, FolderEntity::class, MessageEntity::class], version = 4)
 @TypeConverters(IMAPProtocolConverter::class, StringListConverter::class)
 abstract class AppDatabase: RoomDatabase() {
 

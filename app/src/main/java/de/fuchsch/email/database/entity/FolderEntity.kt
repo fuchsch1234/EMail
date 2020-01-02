@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "folders",
-    indices = [Index(value = ["account"], unique = true)],
+    indices = [Index(value = ["account"], unique = false)],
     foreignKeys = [
     ForeignKey(entity = Account::class,
         parentColumns = ["id"],
