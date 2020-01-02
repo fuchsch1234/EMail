@@ -27,7 +27,7 @@ class MailService(private val session: Session) {
         }
     }
 
-    suspend fun getRootFolder() = withContext(Dispatchers.IO) {
+    suspend fun getRootFolders() = withContext(Dispatchers.IO) {
         store.defaultFolder.list().asList()
     }
 
