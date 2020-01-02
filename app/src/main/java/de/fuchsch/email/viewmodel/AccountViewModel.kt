@@ -15,7 +15,7 @@ class AccountViewModel(private val mailRepository: MailRepository): ViewModel() 
     fun select(account: Account) {
         viewModelScope.launch {
             mailRepository.changeAccount(account)
-            mailRepository.getRootFolder()
+            mailRepository.refreshFolderList()
         }
     }
 
