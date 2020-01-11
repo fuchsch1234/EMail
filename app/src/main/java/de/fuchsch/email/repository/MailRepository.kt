@@ -6,7 +6,6 @@ import de.fuchsch.email.database.dao.FolderDao
 import de.fuchsch.email.database.dao.MessageDao
 import de.fuchsch.email.database.entity.Account
 import de.fuchsch.email.database.entity.FolderEntity
-import de.fuchsch.email.database.entity.MessageEntity
 import de.fuchsch.email.model.Folder
 import de.fuchsch.email.model.Message
 import kotlinx.coroutines.*
@@ -20,7 +19,7 @@ class MailRepository(private val mailService: MailService,
 
     val folders = accountId
         .switchMap { folderDao.getFoldersForAccount(it) }
-        .map { list -> list.map { Folder(it.name, it.messageCount, it.hasUnreadMessages) } }
+        .map { list -> list.map { Folder(it.name, it.url, it.messageCount, it.hasUnreadMessages) } }
 
     private val folder = MutableLiveData<Folder>()
 
@@ -32,7 +31,7 @@ class MailRepository(private val mailService: MailService,
             Log.i(this::class.qualifiedName, "Getting messages for folder $it")
             messageDao.getMessagesForFolder(it) }
         .map { list ->
-            list.map { Message(it.subject, it.message, it.sender, it.recipients, it.messageNumber) } }
+            list.map { Message(it.subject, it.message, it.sender, it.recipients, it.messageNumber.toInt()) } }
 
     init {
         url.observeForever { it?.let { GlobalScope.launch { refreshMessages(it) } } }
@@ -46,12 +45,8 @@ class MailRepository(private val mailService: MailService,
     fun changeFolder(f: Folder) = folder.postValue(f)
 
     suspend fun refreshFolderList() = coroutineScope {
-        mailService.getRootFolders().map { f ->
-            val folder = withContext(Dispatchers.IO) {
-                Folder.fromJavaMailFolder(f)
-            }
-            val entity = FolderEntity(f.urlName.toString(),
-                folder.name, folder.messageCount,
+        mailService.getRootFolders().map { folder ->
+            val entity = FolderEntity(folder.url, folder.name, folder.messageCount,
                 folder.hasUnreadMessages, accountId.value ?: 0)
             Log.i(this@MailRepository::class.qualifiedName, "Saving folder $entity to database")
             folderDao.save(entity)
@@ -62,16 +57,7 @@ class MailRepository(private val mailService: MailService,
         withContext(Dispatchers.IO) {
             Log.i(this@MailRepository::class.qualifiedName, "Storing mail for folder $url")
             mailService.getMessages(folder.value?.name ?: error("URL without folder")).map {
-                    val m = Message.fromMail(it)
-                    val mail = MessageEntity(
-                        m.subject,
-                        m.message,
-                        m.sender,
-                        m.recipients,
-                        m.messageNumber,
-                        url
-                    )
-                    messageDao.save(mail)
+                    messageDao.save(it)
             }
         }
     }
