@@ -16,6 +16,6 @@ data class MessageEntity (
     val message: String,
     val sender: String,
     val recipients: List<String>,
-    val messageNumber: Int,
+    val messageNumber: Long,
     val folder: String
 )
