@@ -6,7 +6,7 @@ import javax.mail.internet.MimeMultipart
 fun MimeMultipart.iterable(): Iterable<BodyPart> =
     Iterable { MimeMultiPartIterator(this) }
 
-class MimeMultiPartIterator(private val multipart: MimeMultipart): Iterator<BodyPart> {
+class MimeMultiPartIterator(private val multipart: MimeMultipart) : Iterator<BodyPart> {
 
     private var index: Int = 0
 

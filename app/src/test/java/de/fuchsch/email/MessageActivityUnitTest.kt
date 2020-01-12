@@ -24,9 +24,10 @@ import org.koin.test.mock.declareMock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class MessageActivityUnitTest: KoinTest {
+class MessageActivityUnitTest : KoinTest {
 
-    private val message = Message("Test subject",
+    private val message = Message(
+        "Test subject",
         "Test message",
         "sender@example.com",
         listOf("recipient@example.com", "cc@example.com"),
@@ -52,7 +53,8 @@ class MessageActivityUnitTest: KoinTest {
     fun `message is displayed`() {
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            MessageActivity::class.java)
+            MessageActivity::class.java
+        )
         intent.putExtra(MessageActivity.MESSAGE, message)
         ActivityScenario.launch<MessageActivity>(intent)
 
@@ -66,19 +68,21 @@ class MessageActivityUnitTest: KoinTest {
     fun `message can be moved`() {
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            MessageActivity::class.java)
+            MessageActivity::class.java
+        )
         intent.putExtra(MessageActivity.MESSAGE, message)
         ActivityScenario.launch<MessageActivity>(intent)
 
         onView(withId(R.id.MessageMoveButton)).perform(click())
-        verify(viewModel,  times(1)).moveMessage(any())
+        verify(viewModel, times(1)).moveMessage(any())
     }
 
     @Test
     fun `message can be deleted`() {
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            MessageActivity::class.java)
+            MessageActivity::class.java
+        )
         intent.putExtra(MessageActivity.MESSAGE, message)
         ActivityScenario.launch<MessageActivity>(intent)
 

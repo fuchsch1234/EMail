@@ -35,15 +35,17 @@ class FolderActivity : AppCompatActivity() {
         }
 
         MessageRecyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = Adapter(this,
+        val adapter = Adapter(
+            this,
             R.layout.folder_recyclerview_item,
-            ::bindRecyclerViewHolder)
-            {
-                val intent = Intent(this, MessageActivity::class.java).apply {
-                    putExtra(MessageActivity.MESSAGE, it)
-                }
-                startActivity(intent)
+            ::bindRecyclerViewHolder
+        )
+        {
+            val intent = Intent(this, MessageActivity::class.java).apply {
+                putExtra(MessageActivity.MESSAGE, it)
             }
+            startActivity(intent)
+        }
         MessageRecyclerView.adapter = adapter
 
         viewmodel.messages.observe(this, Observer {
@@ -58,7 +60,11 @@ class FolderActivity : AppCompatActivity() {
         return true
     }
 
-    private fun bindRecyclerViewHolder(itemView: View, message: Message, listener: (Message) -> Unit) {
+    private fun bindRecyclerViewHolder(
+        itemView: View,
+        message: Message,
+        listener: (Message) -> Unit
+    ) {
         val subjectView: TextView = itemView.findViewById(R.id.SubjectLineTextView)
         subjectView.text = message.subject
         val messageView: TextView = itemView.findViewById(R.id.PreviewTextView)

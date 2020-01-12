@@ -5,12 +5,12 @@ import kotlinx.android.parcel.Parcelize
 import javax.mail.Folder
 
 @Parcelize
-data class Folder (
+data class Folder(
     val name: String,
     val url: String,
     val messageCount: Int,
     val hasUnreadMessages: Boolean
-): Parcelable {
+) : Parcelable {
 
     companion object {
 

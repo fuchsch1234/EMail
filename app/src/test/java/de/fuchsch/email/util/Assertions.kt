@@ -9,13 +9,14 @@ import junit.framework.AssertionFailedError
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 
-class RecyclerViewItemCountAssertion(private val matcher: Matcher<Int>): ViewAssertion {
+class RecyclerViewItemCountAssertion(private val matcher: Matcher<Int>) : ViewAssertion {
 
     override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
         noViewFoundException?.also { throw it }
 
         val recyclerView = view as RecyclerView
-        val adapter = recyclerView.adapter ?: throw AssertionFailedError("Recyclerview has no adapter")
+        val adapter =
+            recyclerView.adapter ?: throw AssertionFailedError("Recyclerview has no adapter")
         ViewMatchers.assertThat("RecyclerView item count mismatch", adapter.itemCount, matcher)
     }
 

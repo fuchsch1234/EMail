@@ -8,8 +8,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity
-data class Account (
+data class Account(
     val name: String,
     @Embedded val settings: AccountSetting,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
-): Parcelable
+) : Parcelable

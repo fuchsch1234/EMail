@@ -45,14 +45,16 @@ class AddAccountActivity : AppCompatActivity() {
             SMTPSpinner.adapter = adapter
         }
 
-        AddAccountButton.setOnClickListener{ addAccount() }
+        AddAccountButton.setOnClickListener { addAccount() }
     }
 
     private fun addAccount() {
-        val settings = AccountSetting(ServerURLEdit.text?.toString() ?: "",
+        val settings = AccountSetting(
+            ServerURLEdit.text?.toString() ?: "",
             EMailEdit.text?.toString() ?: "",
             PasswordEdit.text?.toString() ?: "",
-            IMAPProtocol.IMAPS)
+            IMAPProtocol.IMAPS
+        )
         val account = Account(NameEdit.text?.toString() ?: "", settings)
         Log.i(TAG, "Adding account: $account")
         model.insert(account)

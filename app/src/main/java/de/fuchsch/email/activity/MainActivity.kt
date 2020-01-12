@@ -2,10 +2,10 @@ package de.fuchsch.email.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +14,6 @@ import de.fuchsch.email.R
 import de.fuchsch.email.database.entity.Account
 import de.fuchsch.email.viewmodel.AccountsViewModel
 import kotlinx.android.synthetic.main.accounts_recyclerview_item.view.*
-
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,10 +35,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val adapter = Adapter(this,
+        val adapter = Adapter(
+            this,
             R.layout.accounts_recyclerview_item,
             this::bindRecyclerViewHolder,
-            this::selectAccount)
+            this::selectAccount
+        )
         MainRecyclerView.adapter = adapter
         MainRecyclerView.layoutManager = LinearLayoutManager(this)
         accountsModel.accounts.observe(this, Observer { accounts ->
@@ -61,7 +62,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun bindRecyclerViewHolder(itemView: View, account: Account, listener: (Account) -> Unit) {
+    private fun bindRecyclerViewHolder(
+        itemView: View,
+        account: Account,
+        listener: (Account) -> Unit
+    ) {
         val card: CardView = itemView.findViewById(R.id.AccountCardView)
         card.AccountNameTextView.text = account.name
         card.setOnClickListener { listener(account) }

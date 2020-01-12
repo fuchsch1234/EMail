@@ -50,7 +50,7 @@ val appModule = module {
 
 }
 
-class App: Application() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()

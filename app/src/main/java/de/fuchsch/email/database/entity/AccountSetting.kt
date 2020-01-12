@@ -30,4 +30,4 @@ data class AccountSetting(
     val email: String,
     val password: String,
     val protocol: IMAPProtocol
-    ): Parcelable
+) : Parcelable

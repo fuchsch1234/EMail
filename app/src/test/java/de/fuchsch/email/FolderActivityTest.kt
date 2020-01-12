@@ -21,7 +21,7 @@ import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-class FolderActivityTest: KoinTest {
+class FolderActivityTest : KoinTest {
 
     private lateinit var repository: MailRepository
 
@@ -37,9 +37,11 @@ class FolderActivityTest: KoinTest {
     fun setUp() {
         declareMock<MailRepository> {
             repository = this
-            stub { onBlocking { getMessages(any()) } doReturn listOf(
-                Message("Test Subject", "Test Message", "", emptyList(), 1)
-            )}
+            stub {
+                onBlocking { getMessages(any()) } doReturn listOf(
+                    Message("Test Subject", "Test Message", "", emptyList(), 1)
+                )
+            }
         }
     }
 

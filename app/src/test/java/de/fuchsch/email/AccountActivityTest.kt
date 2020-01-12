@@ -26,7 +26,7 @@ import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-class AccountActivityTest: KoinTest {
+class AccountActivityTest : KoinTest {
 
     private lateinit var viewModel: AccountViewModel
 
@@ -42,7 +42,8 @@ class AccountActivityTest: KoinTest {
 
     @Test
     fun `first test`() {
-        val intent = Intent(ApplicationProvider.getApplicationContext(), AccountActivity::class.java)
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), AccountActivity::class.java)
         intent.putExtra(
             MainActivity.ACCOUNT,
             Account("f", AccountSetting("", "", "", IMAPProtocol.IMAPS))

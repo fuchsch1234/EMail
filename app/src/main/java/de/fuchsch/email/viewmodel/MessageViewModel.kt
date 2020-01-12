@@ -9,7 +9,7 @@ import de.fuchsch.email.model.Message
 import de.fuchsch.email.repository.MailRepository
 import kotlinx.coroutines.launch
 
-class MessageViewModel(private val repository: MailRepository): ViewModel() {
+class MessageViewModel(private val repository: MailRepository) : ViewModel() {
 
     private val messageLiveData = MutableLiveData<Message>()
     val message: LiveData<Message> = messageLiveData

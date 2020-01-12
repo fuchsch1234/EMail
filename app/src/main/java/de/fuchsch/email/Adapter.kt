@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class Adapter<T>(context: Context,
-                 private val viewType: Int,
-                 private val bind: (View, T, (T) -> Unit) -> Unit,
-                 private val listener: (T) -> Unit = {})
-    : RecyclerView.Adapter<Adapter<T>.ViewHolder>()
-{
+class Adapter<T>(
+    context: Context,
+    private val viewType: Int,
+    private val bind: (View, T, (T) -> Unit) -> Unit,
+    private val listener: (T) -> Unit = {}
+) : RecyclerView.Adapter<Adapter<T>.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 

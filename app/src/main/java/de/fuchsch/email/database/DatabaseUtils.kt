@@ -10,7 +10,7 @@ class StringListConverter {
 
     @TypeConverter
     fun stringToStringList(data: String?): List<String> =
-        gson.fromJson(data, object:TypeToken<List<String>>(){}.type)
+        gson.fromJson(data, object : TypeToken<List<String>>() {}.type)
 
     @TypeConverter
     fun stringListToString(data: List<String>): String = gson.toJson(data)

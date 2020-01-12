@@ -29,7 +29,7 @@ import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 @LooperMode(LooperMode.Mode.PAUSED)
-class FolderActivityUnitTest: KoinTest {
+class FolderActivityUnitTest : KoinTest {
 
     private lateinit var viewmodel: FolderViewModel
 
@@ -37,11 +37,13 @@ class FolderActivityUnitTest: KoinTest {
 
     @get:Rule
     var intentsRule =
-        object: IntentsTestRule<FolderActivity>(FolderActivity::class.java) {
+        object : IntentsTestRule<FolderActivity>(FolderActivity::class.java) {
 
             override fun getActivityIntent(): Intent {
-                val intent = Intent(ApplicationProvider.getApplicationContext(),
-                    FolderActivity::class.java)
+                val intent = Intent(
+                    ApplicationProvider.getApplicationContext(),
+                    FolderActivity::class.java
+                )
                 intent.putExtra(
                     FolderActivity.FOLDER,
                     Folder("Inbox", 5, false)
@@ -74,7 +76,12 @@ class FolderActivityUnitTest: KoinTest {
     fun `correct message is opened on click`() {
         onView(withId(R.id.MessageRecyclerView)).check(hasItemCount(1))
         onView(withId(R.id.MessageRecyclerView))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<Adapter<Message>.ViewHolder>(0, click()))
+            .perform(
+                RecyclerViewActions.actionOnItemAtPosition<Adapter<Message>.ViewHolder>(
+                    0,
+                    click()
+                )
+            )
 
         intended(hasComponent(MessageActivity::class.java.canonicalName))
     }

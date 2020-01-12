@@ -1,7 +1,9 @@
 package de.fuchsch.email.repository
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import de.fuchsch.email.database.dao.FolderDao
 import de.fuchsch.email.database.dao.MessageDao
 import de.fuchsch.email.database.entity.Account
@@ -11,10 +13,11 @@ import de.fuchsch.email.model.Message
 import kotlinx.coroutines.*
 import javax.mail.URLName
 
-class MailRepository(private val mailService: MailService,
-                     private val folderDao: FolderDao,
-                     private val messageDao: MessageDao)
-{
+class MailRepository(
+    private val mailService: MailService,
+    private val folderDao: FolderDao,
+    private val messageDao: MessageDao
+) {
 
     private val accountId = MutableLiveData<Int>()
 
@@ -30,9 +33,19 @@ class MailRepository(private val mailService: MailService,
     val messages = url
         .switchMap {
             Log.i(this::class.qualifiedName, "Getting messages for folder $it")
-            messageDao.getMessagesForFolder(it) }
+            messageDao.getMessagesForFolder(it)
+        }
         .map { list ->
-            list.map { Message(it.subject, it.message, it.sender, it.recipients, it.messageNumber.toInt()) } }
+            list.map {
+                Message(
+                    it.subject,
+                    it.message,
+                    it.sender,
+                    it.recipients,
+                    it.messageNumber.toInt()
+                )
+            }
+        }
 
     init {
         url.observeForever { it?.let { GlobalScope.launch { refreshMessages(it) } } }
@@ -47,8 +60,10 @@ class MailRepository(private val mailService: MailService,
 
     suspend fun refreshFolderList() = coroutineScope {
         mailService.getRootFolders().map { folder ->
-            val entity = FolderEntity(folder.url, folder.name, folder.messageCount,
-                folder.hasUnreadMessages, accountId.value ?: 0)
+            val entity = FolderEntity(
+                folder.url, folder.name, folder.messageCount,
+                folder.hasUnreadMessages, accountId.value ?: 0
+            )
             Log.i(this@MailRepository::class.qualifiedName, "Saving folder $entity to database")
             folderDao.save(entity)
         }
@@ -56,22 +71,23 @@ class MailRepository(private val mailService: MailService,
 
     private suspend fun refreshMessages(url: String) = coroutineScope {
         awaitAll(
-        async(Dispatchers.IO) {
-            Log.i(this@MailRepository::class.qualifiedName, "Storing mail for folder $url")
-            mailService.getMessages(URLName(url)).map {
+            async(Dispatchers.IO) {
+                Log.i(this@MailRepository::class.qualifiedName, "Storing mail for folder $url")
+                mailService.getMessages(URLName(url)).map {
                     messageDao.save(it)
+                }
+            },
+            async(Dispatchers.IO) {
+                val uids = messageDao.getIdsForFolder(url)
+                val deleted = mailService.messagesHaveBeenDeleted(URLName(url), uids)
+                uids.zip(deleted)
+                    .forEach { (uid, delete) -> if (delete) messageDao.delete(url, uid) }
             }
-        },
-        async(Dispatchers.IO) {
-            val uids = messageDao.getIdsForFolder(url)
-            val deleted = mailService.messagesHaveBeenDeleted(URLName(url), uids)
-            uids.zip(deleted).forEach { (uid, delete) -> if (delete) messageDao.delete(url, uid) }
-        }
         )
     }
 
     suspend fun deleteMessage(message: Message) = coroutineScope {
-        folder.value?.let {folder ->
+        folder.value?.let { folder ->
             mailService.deleteMessage(folder.name, message.messageNumber)
         }
     }

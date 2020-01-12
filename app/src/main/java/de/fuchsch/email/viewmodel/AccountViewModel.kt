@@ -8,7 +8,7 @@ import de.fuchsch.email.model.Folder
 import de.fuchsch.email.repository.MailRepository
 import kotlinx.coroutines.launch
 
-class AccountViewModel(private val mailRepository: MailRepository): ViewModel() {
+class AccountViewModel(private val mailRepository: MailRepository) : ViewModel() {
 
     val folders: LiveData<List<Folder>> = mailRepository.folders
 

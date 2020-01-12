@@ -9,8 +9,6 @@ import de.fuchsch.email.database.entity.MessageEntity
 import de.fuchsch.email.util.iterable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.IllegalStateException
-import java.lang.IndexOutOfBoundsException
 import javax.mail.*
 import javax.mail.internet.MimeMultipart
 
@@ -62,31 +60,34 @@ class MailService(private val session: Session) {
                 message.allRecipients.map { it.toString() },
                 folder.getUID(message),
                 folder.urlName.toString()
-            ) }
-    }
-
-    suspend fun messagesHaveBeenDeleted(url: URLName, uids: List<Long>) = withContext(Dispatchers.IO) {
-        val folder = store.getFolder(url) as IMAPFolder
-        folder.open(Folder.READ_ONLY)
-        folder.getMessagesByUID(uids.toLongArray()).map { it == null }
-    }
-
-    suspend fun deleteMessage(folderName: String, messageNumber: Int) = withContext(Dispatchers.IO) {
-        try {
-            val folder = store.getFolder(folderName)
-            folder.open(Folder.READ_WRITE)
-            val message = folder.getMessage(messageNumber)
-            message.setFlag(Flags.Flag.DELETED, true)
-            folder.expunge()
-        } catch (e: IndexOutOfBoundsException) {
-            Log.w(this::class.java.canonicalName, "${e.message}")
-        } catch (e: FolderNotFoundException) {
-            Log.w(this::class.java.canonicalName, "${e.message}")
-        } catch (e: IllegalStateException) {
-            Log.w(this::class.java.canonicalName, "${e.message}")
-        } catch (e: MessagingException) {
-            Log.w(this::class.java.canonicalName, "${e.message}")
+            )
         }
     }
+
+    suspend fun messagesHaveBeenDeleted(url: URLName, uids: List<Long>) =
+        withContext(Dispatchers.IO) {
+            val folder = store.getFolder(url) as IMAPFolder
+            folder.open(Folder.READ_ONLY)
+            folder.getMessagesByUID(uids.toLongArray()).map { it == null }
+        }
+
+    suspend fun deleteMessage(folderName: String, messageNumber: Int) =
+        withContext(Dispatchers.IO) {
+            try {
+                val folder = store.getFolder(folderName)
+                folder.open(Folder.READ_WRITE)
+                val message = folder.getMessage(messageNumber)
+                message.setFlag(Flags.Flag.DELETED, true)
+                folder.expunge()
+            } catch (e: IndexOutOfBoundsException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            } catch (e: FolderNotFoundException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            } catch (e: IllegalStateException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            } catch (e: MessagingException) {
+                Log.w(this::class.java.canonicalName, "${e.message}")
+            }
+        }
 
 }

@@ -7,7 +7,7 @@ import de.fuchsch.email.database.entity.Account
 import de.fuchsch.email.repository.AccountRepository
 import kotlinx.coroutines.launch
 
-class AccountsViewModel(private val repository: AccountRepository): ViewModel() {
+class AccountsViewModel(private val repository: AccountRepository) : ViewModel() {
 
     val accounts: LiveData<List<Account>> = repository.accounts
 
