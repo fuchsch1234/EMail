@@ -19,7 +19,7 @@ interface FolderDao {
     @Query("SELECT url FROM folders WHERE account = :accountId AND name = :name")
     fun getUrlFromNameAndAccount(name: String, accountId: Int): LiveData<String>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(folder: FolderEntity)
 
 }
