@@ -34,7 +34,7 @@ class MailService(private val session: Session) {
         store.defaultFolder.list().map { de.fuchsch.email.model.Folder.fromJavaMailFolder(it) }
     }
 
-    private fun getMainContent(message: javax.mail.Message) = when (message.content) {
+    private fun getMainContent(message: Message) = when (message.content) {
         is String -> message.content as String
         is MimeMultipart -> {
             val mp = message.content as MimeMultipart
@@ -56,7 +56,7 @@ class MailService(private val session: Session) {
             MessageEntity(
                 message.subject,
                 getMainContent(message),
-                message.from.first().let { it.toString() },
+                message.from.first().toString(),
                 message.allRecipients.map { it.toString() },
                 folder.getUID(message),
                 folder.urlName.toString()
