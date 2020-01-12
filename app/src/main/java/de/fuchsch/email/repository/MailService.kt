@@ -50,8 +50,9 @@ class MailService(private val session: Session) {
         }
 
     }
-    suspend fun getMessages(folderName: String) = withContext(Dispatchers.IO) {
-        val folder = store.getFolder(folderName) as IMAPFolder
+
+    suspend fun getMessages(url: URLName) = withContext(Dispatchers.IO) {
+        val folder = store.getFolder(url) as IMAPFolder
         folder.open(Folder.READ_ONLY)
         folder.messages.map { message ->
             MessageEntity(
@@ -62,6 +63,12 @@ class MailService(private val session: Session) {
                 folder.getUID(message),
                 folder.urlName.toString()
             ) }
+    }
+
+    suspend fun messagesHaveBeenDeleted(url: URLName, uids: List<Long>) = withContext(Dispatchers.IO) {
+        val folder = store.getFolder(url) as IMAPFolder
+        folder.open(Folder.READ_ONLY)
+        folder.getMessagesByUID(uids.toLongArray()).map { it == null }
     }
 
     suspend fun deleteMessage(folderName: String, messageNumber: Int) = withContext(Dispatchers.IO) {

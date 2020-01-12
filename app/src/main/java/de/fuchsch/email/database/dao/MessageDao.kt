@@ -13,7 +13,13 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE folder = :folder")
     fun getMessagesForFolder(folder: String): LiveData<List<MessageEntity>>
 
+    @Query("SELECT messageNumber FROM messages WHERE folder = :folder")
+    suspend fun getIdsForFolder(folder: String): List<Long>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(message: MessageEntity)
+
+    @Query("DELETE FROM messages WHERE folder = :folder AND messageNumber = :uid")
+    suspend fun delete(folder: String, uid: Long)
 
 }

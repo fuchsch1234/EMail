@@ -9,6 +9,7 @@ import de.fuchsch.email.database.entity.FolderEntity
 import de.fuchsch.email.model.Folder
 import de.fuchsch.email.model.Message
 import kotlinx.coroutines.*
+import javax.mail.URLName
 
 class MailRepository(private val mailService: MailService,
                      private val folderDao: FolderDao,
@@ -54,12 +55,19 @@ class MailRepository(private val mailService: MailService,
     }
 
     private suspend fun refreshMessages(url: String) = coroutineScope {
-        withContext(Dispatchers.IO) {
+        awaitAll(
+        async(Dispatchers.IO) {
             Log.i(this@MailRepository::class.qualifiedName, "Storing mail for folder $url")
-            mailService.getMessages(folder.value?.name ?: error("URL without folder")).map {
+            mailService.getMessages(URLName(url)).map {
                     messageDao.save(it)
             }
+        },
+        async(Dispatchers.IO) {
+            val uids = messageDao.getIdsForFolder(url)
+            val deleted = mailService.messagesHaveBeenDeleted(URLName(url), uids)
+            uids.zip(deleted).forEach { (uid, delete) -> if (delete) messageDao.delete(url, uid) }
         }
+        )
     }
 
     suspend fun deleteMessage(message: Message) = coroutineScope {
