@@ -46,7 +46,7 @@ class FolderActivityUnitTest : KoinTest {
                 )
                 intent.putExtra(
                     FolderActivity.FOLDER,
-                    Folder("Inbox", 5, false)
+                    Folder("Inbox", "INBOX", 5, false)
                 )
                 return intent
             }

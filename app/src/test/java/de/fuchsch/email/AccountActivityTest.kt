@@ -34,7 +34,7 @@ class AccountActivityTest : KoinTest {
     fun setup() {
         declareMock<AccountViewModel> {
             given(folders).willReturn {
-                MutableLiveData(listOf(Folder("Inbox", 1, true)))
+                MutableLiveData(listOf(Folder("Inbox", "INBOX", 1, true)))
             }
             viewModel = this
         }

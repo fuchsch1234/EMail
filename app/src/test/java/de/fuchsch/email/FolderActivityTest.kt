@@ -1,6 +1,8 @@
 package de.fuchsch.email
 
 import android.content.Intent
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -29,7 +31,7 @@ class FolderActivityTest : KoinTest {
         Intent(ApplicationProvider.getApplicationContext(), FolderActivity::class.java).apply {
             putExtra(
                 FolderActivity.FOLDER,
-                Folder("Inbox", 5, false)
+                Folder("Inbox", "INBOX", 5, false)
             )
         }
 
@@ -38,9 +40,9 @@ class FolderActivityTest : KoinTest {
         declareMock<MailRepository> {
             repository = this
             stub {
-                onBlocking { getMessages(any()) } doReturn listOf(
+                onBlocking { messages } doReturn MutableLiveData(listOf(
                     Message("Test Subject", "Test Message", "", emptyList(), 1)
-                )
+                ))
             }
         }
     }
