@@ -90,7 +90,9 @@ class MailRepository(
         folder.value?.let { folder ->
             val deleted = mailService.deleteMessage(folder.name, message.messageNumber)
             if (deleted) {
-                messageDao.delete(folder.name, message.messageNumber)
+                Log.i(this@MailRepository::class.qualifiedName,
+                    "Deleting mail ${message.messageNumber} from folder ${folder.name}")
+                messageDao.delete(folder.url, message.messageNumber)
             }
         }
     }
