@@ -11,7 +11,7 @@ data class Message(
     val message: String,
     val sender: String,
     val recipients: List<String>,
-    val messageNumber: Int
+    val messageNumber: Long
 ) : Parcelable {
 
     companion object {
@@ -38,7 +38,7 @@ data class Message(
                 content,
                 message.from.first().toString(),
                 message.allRecipients.map { it.toString() },
-                message.messageNumber
+                message.messageNumber.toLong()
             )
         }
     }

@@ -71,14 +71,15 @@ class MailService(private val session: Session) {
             folder.getMessagesByUID(uids.toLongArray()).map { it == null }
         }
 
-    suspend fun deleteMessage(folderName: String, messageNumber: Int) =
+    suspend fun deleteMessage(folderName: String, messageNumber: Long) =
         withContext(Dispatchers.IO) {
             try {
-                val folder = store.getFolder(folderName)
+                val folder = store.getFolder(folderName) as IMAPFolder
                 folder.open(Folder.READ_WRITE)
-                val message = folder.getMessage(messageNumber)
+                val message = folder.getMessageByUID(messageNumber)
                 message.setFlag(Flags.Flag.DELETED, true)
                 folder.expunge()
+                return@withContext true
             } catch (e: IndexOutOfBoundsException) {
                 Log.w(this::class.java.canonicalName, "${e.message}")
             } catch (e: FolderNotFoundException) {
@@ -88,6 +89,7 @@ class MailService(private val session: Session) {
             } catch (e: MessagingException) {
                 Log.w(this::class.java.canonicalName, "${e.message}")
             }
+            return@withContext false
         }
 
 }

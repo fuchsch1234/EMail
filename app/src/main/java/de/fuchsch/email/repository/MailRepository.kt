@@ -42,7 +42,7 @@ class MailRepository(
                     it.message,
                     it.sender,
                     it.recipients,
-                    it.messageNumber.toInt()
+                    it.messageNumber
                 )
             }
         }
@@ -88,7 +88,10 @@ class MailRepository(
 
     suspend fun deleteMessage(message: Message) = coroutineScope {
         folder.value?.let { folder ->
-            mailService.deleteMessage(folder.name, message.messageNumber)
+            val deleted = mailService.deleteMessage(folder.name, message.messageNumber)
+            if (deleted) {
+                messageDao.delete(folder.name, message.messageNumber)
+            }
         }
     }
 
