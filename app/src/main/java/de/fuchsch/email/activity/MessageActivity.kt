@@ -1,6 +1,7 @@
 package de.fuchsch.email.activity
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import de.fuchsch.email.R
@@ -42,7 +43,11 @@ class MessageActivity : AppCompatActivity() {
             viewModel.setMessage(message)
         }
 
-        MessageDeleteButton.setOnClickListener { viewModel.deleteMessage() }
+        MessageDeleteButton.setOnClickListener {
+            Toast.makeText(this, R.string.deleting_message_toast, Toast.LENGTH_SHORT).show()
+            viewModel.deleteMessage()
+            finish()
+        }
 
     }
 
